@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Calculator</title>
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        input, select, button {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trading Calculator</h1>
+        <form id="tradingForm">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" required>
+            
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+            
+            <label for="fee">Fee Percentage (0.6%):</label>
+            <input type="number" id="fee" name="fee" value="0.6" step="0.1" required>
+            
+            <label for="tradeType">Trade Type:</label>
+            <select id="tradeType" name="tradeType">
+                <option value="long">Long</option>
+                <option value="short">Short</option>
+            </select>
+            
+            <button type="button" onclick="calculate()">Calculate</button>
+        </form>
+
+        <div class="result">
+            Result: <span id="result"></span>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const price = parseFloat(document.getElementById('price').value);
+            const quantity = parseFloat(document.getElementById('quantity').value);
+            const fee = parseFloat(document.getElementById('fee').value) / 100;
+            const tradeType = document.getElementById('tradeType').value;
+
+            let result;
+            if (tradeType === 'long') {
+                result = (price * quantity) * (1 - fee);
+            } else {
+                result = (price * quantity) * (1 + fee);
+            }
+
+            document.getElementById('result').innerText = result.toFixed(2);
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function() {
+                    console.log('Service Worker Registered');
+                })
+                .catch(function(error) {
+                    console.log('Service Worker Registration Failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>
